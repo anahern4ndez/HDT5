@@ -5,14 +5,17 @@
 
 import simpy
 import random
+#import numpy as np
+#import statistics as stats
 
 
+Tiempoprocesos = [] #Lista para poder almacenar los tiempos de los procesos
 class Computer:
     def __init__(self, env):
         self.RAM = simpy.Container(env, init = 0, capacity =100)
         self.CPU = simpy.Resource(env, capacity =1)
         
-def proceso(env, name, arriving_time, computadora):
+def proceso(env, name, numero, arriving_time, computadora):
     #
     yield env.timeout(arriving_time)
     #Momento en el que llega 
@@ -48,6 +51,9 @@ def proceso(env, name, arriving_time, computadora):
                 terminado = True
 
     print "Proceso %s ha dejado el CPU en %s"% (name,env.now)
+    fin = env.now
+    tiempototal = horaLlegada - fin
+    Tiempoprocesos.insert(numero,tiempototal) #Para almacenar los tiempos de los procesos   
             
                     
             
@@ -63,7 +69,10 @@ env = simpy.Environment() #ambiente de simulacion
 random.seed(10)
 compu = Computer(env)
 for i in range(10):
-    env.process(proceso(env,'Proceso %d'%i,random.expovariate(1.0/10), compu))
+    env.process(proceso(env,'Proceso %d'%i,i,random.expovariate(1.0/10), compu))
 env.run(50)  #correr la simulacionn hasta el tiempo = 50
+tiempopromedio = sum(Tiempoprocesos)*1.0/len(Tiempoprocesos)
+#desvestandar = np.std(Tiempoprocesos)
+#desvestandar = stats.pstdev(Tiempoprocesos)
 
 #print ("tiempo promedio por vehiculo es: ", totalDia/5.0)
