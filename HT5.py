@@ -62,7 +62,7 @@ def proceso(env, name, numero, arriving_time, computadora):
 env = simpy.Environment() #ambiente de simulacion
 random.seed(10)
 compu = Computer(env)
-cantidadProcesos = 25
+cantidadProcesos = 200
 for i in range(cantidadProcesos):
     env.process(proceso(env, '%d'%i, i+1, random.expovariate(1.0/10), compu))
 env.run(until = None)  #correr la simulacion hasta que ya no hayan procesos
