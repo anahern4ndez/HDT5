@@ -64,7 +64,7 @@ random.seed(10)
 compu = Computer(env)
 cantidadProcesos = 25
 for i in range(cantidadProcesos):
-    env.process(proceso(env, '%d'%i, i+1, random.expovariate(1.0/1), compu))
+    env.process(proceso(env, '%d'%i, i+1, random.expovariate(1.0/10), compu))
 env.run(until = None)  #correr la simulacion hasta que ya no hayan procesos
 tiempoPromedio = sum(TiempoProcesos)*1.0/len(TiempoProcesos)
 print "\n \n \t ---> TIEMPO PROMEDIO PARA CADA PROCESO: "+ str(tiempoPromedio)
