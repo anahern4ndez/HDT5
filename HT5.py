@@ -6,8 +6,6 @@
 import simpy
 import random
 import math
-#import numpy as np
-#import statistics as stats
 
 
 TiempoProcesos = [] #Lista para poder almacenar los tiempos de los procesos
@@ -38,16 +36,14 @@ def proceso(env, name, numero, arriving_time, computadora):
                 for i in range(3): #Realiza solamente 3 instrucciones
                     cantidadMemoria -=1
                     computadora.RAM.get(1)
-
                 waiting = random.randint(0,2)
-                yield env.timeout(1)
             #Finaliza de estar en la CPU
             #Ingresa a cola de Waiting, si random ==0, pasa a cola ready
             if (waiting ==0):
                 print "Proceso %s en cola de Ready en %s"% (name,env.now)
             elif waiting == 1:
                 print "Proceso %s en cola de Waiting para hacer operaciones I/O en tiempo =  %s"% (name,env.now)
-                yield env.timeout(2)
+                yield env.timeout(1)
             #Deja el CPU
             if cantidadMemoria <3 :
                 if cantidadMemoria > 0:
@@ -66,10 +62,9 @@ def proceso(env, name, numero, arriving_time, computadora):
 env = simpy.Environment() #ambiente de simulacion
 random.seed(10)
 compu = Computer(env)
-cantidadProcesos = 5
+cantidadProcesos = 25
 for i in range(cantidadProcesos):
-    env.process(proceso(env, '%d'%i, i+1, random.expovariate(1.0/10), compu))
-    cantidadProcesos -=1
+    env.process(proceso(env, '%d'%i, i+1, random.expovariate(1.0/1), compu))
 env.run(until = None)  #correr la simulacion hasta que ya no hayan procesos
 tiempoPromedio = sum(TiempoProcesos)*1.0/len(TiempoProcesos)
 print "\n \n \t ---> TIEMPO PROMEDIO PARA CADA PROCESO: "+ str(tiempoPromedio)
