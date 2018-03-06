@@ -2,6 +2,7 @@
 #HT5.py
 #Ana Lucia Hernandez 17138
 #Andres Urizar 17632
+#Simulacion de llegada y procesamiento interno en una computadora de instrucciones/procesos
 
 import simpy
 import random
@@ -47,7 +48,7 @@ def proceso(env, name, numero, arriving_time, computadora):
             #Deja el CPU
             if cantidadMemoria <3 :
                 if cantidadMemoria > 0:
-                    computadora.RAM.get(cantidadMemoria)
+                    computadora.RAM.get(cantidadMemoria) #el proceso devuelve el espacio de memoria que ha ocupado
                 terminado = True
     
     print "Proceso %s ha dejado el CPU en tiempo = %s"% (name,env.now)
@@ -57,12 +58,12 @@ def proceso(env, name, numero, arriving_time, computadora):
     TiempoProcesos.insert(numero,tiempototal) #Para almacenar los tiempos de los procesos   
         
 
-# ----------------------
+# ---------------------- comienzo de programa a ejecutar
 
 env = simpy.Environment() #ambiente de simulacion
 random.seed(10)
 compu = Computer(env)
-cantidadProcesos = 200
+cantidadProcesos = 25
 for i in range(cantidadProcesos):
     env.process(proceso(env, '%d'%i, i+1, random.expovariate(1.0/10), compu))
 env.run(until = None)  #correr la simulacion hasta que ya no hayan procesos
